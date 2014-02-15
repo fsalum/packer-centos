@@ -1,0 +1,107 @@
+{
+  "builders": [
+    {
+      "name": "centos64",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "headless": false,
+      "disk_size": 8000,
+      "guest_os_type": "RedHat_64",
+      "http_directory": "http",
+      "iso_checksum": "467b53791903f9a0c477cbb1b24ffd1f",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://mirrors.usc.edu/pub/linux/distributions/centos/6.4/isos/x86_64/CentOS-6.4-x86_64-minimal.iso",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "guest_additions_url": "/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso",
+      "guest_additions_path": "/tmp/VBoxGuestAdditions.iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "480"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ]
+    },
+    {
+      "name": "centos65",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "headless": false,
+      "disk_size": 8000,
+      "guest_os_type": "RedHat_64",
+      "http_directory": "http",
+      "iso_checksum": "467b53791903f9a0c477cbb1b24ffd1f",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://mirrors.usc.edu/pub/linux/distributions/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "guest_additions_url": "/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso",
+      "guest_additions_path": "/tmp/VBoxGuestAdditions.iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "480"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ]
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/vagrant.sh",
+        "scripts/virtualbox.sh",
+        "scripts/puppet.sh",
+        "scripts/chef.sh",
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ],
+      "override": {
+        "centos64": {
+          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+        },
+        "centos65": {
+          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+        }
+      }
+    }
+  ],
+
+  "post-processors": [
+      {
+        "type": "vagrant",
+        "compression_level": 1,
+        "output": "{{.BuildName}}.box"
+      }
+  ]
+}
