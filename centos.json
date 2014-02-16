@@ -1,13 +1,49 @@
 {
   "builders": [
     {
+      "name": "centos63",
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "headless": true,
+      "disk_size": 8000,
+      "guest_os_type": "RedHat_64",
+      "http_directory": "http",
+      "iso_checksum": "087713752fa88c03a5e8471c661ad1a2",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://mirrors.usc.edu/pub/linux/distributions/centos/6.3/isos/x86_64/CentOS-6.3-x86_64-minimal.iso",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "guest_additions_url": "/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso",
+      "guest_additions_path": "/tmp/VBoxGuestAdditions.iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "480"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ]
+    },
+    {
       "name": "centos64",
       "type": "virtualbox-iso",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
-      "headless": false,
+      "headless": true,
       "disk_size": 8000,
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
@@ -43,7 +79,7 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
-      "headless": false,
+      "headless": true,
       "disk_size": 8000,
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
@@ -87,6 +123,9 @@
         "scripts/zerodisk.sh"
       ],
       "override": {
+        "centos63": {
+          "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+        },
         "centos64": {
           "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
         },

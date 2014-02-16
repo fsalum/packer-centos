@@ -8,7 +8,7 @@ enabled=1
 gpgcheck=0
 EOM
 
-yum -y install openssh openssh-server openssh-clients sudo gcc make gcc-c++ kernel-devel-`uname -r` zlib-devel openssl-devel readline-devel sqlite-devel perl wget dkms nfs-utils
+yum -y install openssh openssh-server openssh-clients sudo gcc make gcc-c++ kernel kernel-devel-`uname -r` zlib-devel openssl-devel readline-devel sqlite-devel perl wget dkms nfs-utils
 
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
